@@ -45,15 +45,18 @@ function saveSearch(city) {
         lat: city.lat,
     }
 
-    if (historyArr) {
-        historyArr.push(historyObj);
-        if (historyArr.length > 5) {
-            historyArr.shift();
-        }
-    }
-    else {
-        historyArr = [historyObj];
-    }
+    if (historyArr) { 
+        const isPresent = historyArr.some(obj => 
+        { 
+        return obj.city === historyObj.city && obj.state === historyObj.state && obj.country === historyObj.country && obj.lon === historyObj.lon && obj.lat === historyObj.lat; });
+        if(isPresent){ 
+        const index = historyArr.findIndex(obj => obj.city === historyObj.city && obj.state === historyObj.state && obj.country === historyObj.country && obj.lon === historyObj.lon && obj.lat === historyObj.lat); 
+        if (index !== -1) { 
+        historyArr.splice(index, 1); } 
+        } 
+    historyArr.push(historyObj); 
+    if (historyArr.length > 5) { historyArr.shift(); } } 
+    else { historyArr = [historyObj]; }
 
     localStorage.setItem("savedSearches", JSON.stringify(historyArr));
     renderSearchHistory();
